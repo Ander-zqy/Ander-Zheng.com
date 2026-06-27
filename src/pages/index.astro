@@ -1,0 +1,136 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Work from '../components/Work.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Writing from '../components/Writing.astro';
+import Media from '../components/Media.astro';
+import Learning from '../components/Learning.astro';
+import Bookshelf from '../components/Bookshelf.astro';
+import Connect from '../components/Connect.astro';
+import Footer from '../components/Footer.astro';
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>郑秋阳 Qiuyang Zheng</title>
+</head>
+<body data-lang="zh">
+
+<Header />
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <Hero />
+
+  <!-- 01 WORK -->
+  <Work />
+
+  <!-- 02 EXPERIENCE -->
+  <Experience />
+
+  <!-- 03 PROJECTS -->
+  <Projects />
+
+  <!-- 04 WRITING -->
+  <Writing />
+
+  <!-- 05 MEDIA -->
+  <Media />
+
+  <!-- 06 LEARNING PATH -->
+  <Learning />
+
+  <!-- 07 BOOKSHELF -->
+  <Bookshelf />
+
+  <!-- CONNECT -->
+  <Connect />
+
+</main>
+
+<Footer />
+
+<script is:inline>
+  // language toggle
+  var body=document.body;
+  document.querySelectorAll('.langtog button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var set=b.getAttribute('data-set');
+      body.setAttribute('data-lang',set);
+      body.setAttribute('lang', set==='en'?'en':(set==='tw'?'zh-Hant':'zh-CN'));
+      document.querySelectorAll('.langtog button').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+    });
+  });
+
+  // article expand/collapse
+  document.querySelectorAll('.art-toggle').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=document.getElementById(btn.getAttribute('data-target'));
+      var open=t.classList.toggle('open');
+      btn.classList.toggle('open',open);
+      btn.setAttribute('aria-expanded',open?'true':'false');
+      btn.querySelector('.t-more').style.display=open?'none':'';
+      btn.querySelector('.t-less').style.display=open?'':'none';
+      if(open){t.style.maxHeight=t.scrollHeight+'px';}
+      else{t.style.maxHeight=0;}
+    });
+  });
+  // keep open article sized correctly on language switch / resize
+  function resize(){document.querySelectorAll('.art-body.open').forEach(function(t){t.style.maxHeight=t.scrollHeight+'px';});}
+  window.addEventListener('resize',resize);
+  document.querySelectorAll('.langtog button').forEach(function(b){b.addEventListener('click',function(){setTimeout(resize,30);});});
+
+  // copy handles
+  document.querySelectorAll('[data-copy]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      var v=a.getAttribute('data-copy');
+      if(navigator.clipboard){navigator.clipboard.writeText(v);}
+      var val=a.querySelector('.val'),old=val.textContent;
+      val.textContent='✓ copied';setTimeout(function(){val.textContent=old;},1100);
+    });
+  });
+
+  // learning-path tabs
+  document.querySelectorAll('.tab-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=b.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('show');});
+      document.getElementById('tab-'+t).classList.add('show');
+    });
+  });
+
+  // scroll reveal
+  if('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  }else{
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
+  }
+
+  // active nav highlight
+  var navmap={};document.querySelectorAll('nav.sect a').forEach(function(a){navmap[a.getAttribute('href').slice(1)]=a;});
+  var sObs=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting){
+        Object.values(navmap).forEach(function(a){a.classList.remove('active');});
+        var id=en.target.getAttribute('id');if(navmap[id])navmap[id].classList.add('active');
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section.block').forEach(function(s){sObs.observe(s);});
+</script>
+<a id="top"></a>
+</body>
+</html>

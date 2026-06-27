@@ -1,0 +1,105 @@
+backend:
+  name: github
+  repo: Ander-zqy/Ander-Zheng.com
+  branch: main
+
+# 本地调试：运行 `npx decap-server` 后，可在不接 GitHub 认证的情况下打开后台。
+local_backend: true
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# 站点为简 / 繁 / 英三语，每个文案字段拆为 zh / tw / en 三个子字段。
+collections:
+  - name: "site"
+    label: "站点设置"
+    files:
+      - name: "hero"
+        label: "首页 Hero"
+        file: "src/data/hero.json"
+        fields:
+          - { name: "name_zh", label: "姓名（简）", widget: "string", default: "郑秋阳" }
+          - { name: "name_tw", label: "姓名（繁）", widget: "string", default: "鄭秋陽" }
+          - { name: "name_en", label: "姓名（EN）", widget: "string", default: "Qiuyang Zheng" }
+          - { name: "name_rom", label: "罗马音署名", widget: "string", default: "Qiuyang Zheng · Ander" }
+          - { name: "identity_zh", label: "自我介绍（简）", widget: "text" }
+          - { name: "identity_tw", label: "自我介绍（繁）", widget: "text" }
+          - { name: "identity_en", label: "自我介绍（EN）", widget: "text" }
+          - name: "portrait"
+            label: "人物照片"
+            widget: "image"
+            required: false
+            default: "/hero.jpg"
+          - name: "tags"
+            label: "标签"
+            widget: "list"
+            fields:
+              - { name: "zh", label: "简", widget: "string" }
+              - { name: "tw", label: "繁", widget: "string" }
+              - { name: "en", label: "EN", widget: "string" }
+
+      - name: "connect"
+        label: "联系方式"
+        file: "src/data/connect.json"
+        fields:
+          - name: "links"
+            label: "联系入口"
+            widget: "list"
+            fields:
+              - { name: "label", label: "类别", widget: "string" }
+              - { name: "value", label: "展示值", widget: "string" }
+              - { name: "href", label: "链接 / mailto", widget: "string", required: false }
+              - { name: "copy", label: "点击复制内容", widget: "string", required: false }
+
+  - name: "work"
+    label: "在做的事 / 经历 / 项目"
+    folder: "src/data/roles"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - name: "section"
+        label: "归属板块"
+        widget: "select"
+        options: ["work", "experience", "projects"]
+      - { name: "name_zh", label: "名称（简）", widget: "string" }
+      - { name: "name_tw", label: "名称（繁）", widget: "string" }
+      - { name: "name_en", label: "名称（EN）", widget: "string" }
+      - { name: "role", label: "角色 / 职务", widget: "string", required: false }
+      - { name: "when", label: "时间", widget: "string", required: false }
+      - { name: "desc_zh", label: "描述（简）", widget: "text" }
+      - { name: "desc_tw", label: "描述（繁）", widget: "text" }
+      - { name: "desc_en", label: "描述（EN）", widget: "text" }
+      - { name: "link", label: "外链", widget: "string", required: false }
+
+  - name: "writing"
+    label: "内容创作"
+    folder: "src/data/writing"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: "date", label: "日期", widget: "string" }
+      - { name: "title_zh", label: "标题（简）", widget: "string" }
+      - { name: "title_tw", label: "标题（繁）", widget: "string" }
+      - { name: "title_en", label: "标题（EN）", widget: "string" }
+      - { name: "source", label: "原文链接", widget: "string", required: false }
+      - { name: "body_zh", label: "正文（简）", widget: "markdown" }
+      - { name: "body_tw", label: "正文（繁）", widget: "markdown" }
+      - { name: "body_en", label: "正文（EN）", widget: "markdown" }
+
+  - name: "bookshelf"
+    label: "书架 / 推荐阅读"
+    folder: "src/data/reads"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: "title", label: "标题", widget: "string" }
+      - { name: "source", label: "来源", widget: "string", required: false }
+      - { name: "href", label: "链接", widget: "string" }
+      - name: "tags"
+        label: "标签"
+        widget: "list"
+        required: false
+        field: { name: "tag", label: "标签", widget: "string" }
+      - { name: "note_zh", label: "简介（简）", widget: "text", required: false }
+      - { name: "note_tw", label: "简介（繁）", widget: "text", required: false }
+      - { name: "note_en", label: "简介（EN）", widget: "text", required: false }
